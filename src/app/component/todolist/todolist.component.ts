@@ -14,14 +14,10 @@ export class TodolistComponent {
   taskName!: string;
   taskIndex: number = -1;
   isUpdateMode: boolean = false;
+  storedTasks: any;
 
   constructor(private storageService: StorageService) { }
 
-  // Usage examples
-  saveData(): void {
-    const data = { key: 'value' };
-    this.storageService.setItem('myData', data);
-  }
 
   loadData(): void {
     const data = this.storageService.getItem('myData');
@@ -36,8 +32,12 @@ export class TodolistComponent {
     this.storageService.clear();
   }
 
-
-  ngOnit(): void { }
+  ngOnInit(): void {
+    this.storedTasks = localStorage.getItem('tasks');
+    if (this.storedTasks) {
+      this.taskArray = JSON.parse(this.storedTasks);
+    }
+  }
 
   onSubmit(form: NgForm) {
     console.log('my form', form);
@@ -48,6 +48,9 @@ export class TodolistComponent {
       taskName: form.controls['task'].value,
       isCompleted: false
     });
+
+    //set data in session storage
+    localStorage.setItem('tasks', JSON.stringify(this.taskArray))
 
     form.reset();
   }
@@ -89,19 +92,8 @@ export class TodolistComponent {
 
     this.taskIndex = -1;
     this.taskName = '';
+
   }
-  //   // Retrieve the taskArray from localStorage
-  //   const storedTasks = localStorage.getItem('tasks');
-
-  //   // Check if there are stored tasks
-  //   const taskArray = storedTasks ? JSON.parse(storedTasks) : [{ id: 0, taskName: 'Creating user endpoint', isCompleted: false }];
-
-  // // Update the taskArray as needed
-  // taskArray.push({ id: 1, taskName: 'Implementing authentication', isCompleted: false });
-
-  // // Store the updated taskArray in localStorage
-  // localStorage.setItem('tasks', JSON.stringify(taskArray));
-
 
 
 }
