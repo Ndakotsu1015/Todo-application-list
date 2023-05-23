@@ -1,0 +1,55 @@
+
+
+
+<div class="container">
+  <h1 class="text text-center text-bold"> To-do tasks application list</h1>
+  <hr>
+<form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+  <div class="mb-3">
+    <label for="task">Task</label>
+    <input type="text" class="form-control"
+    id="task" placeholder="What do you want to do?"
+    [(ngModel)]="taskName"
+    ngModel name="task"
+    required>
+    <small *ngIf="taskForm.invalid && taskForm.dirty" class="form-text text-danger">Required Field.</small>
+
+  </div>
+
+
+  <button id="submitButton" type="submit" class="btn btn-primary mr-2"
+
+  [disabled]="taskForm.invalid" *ngIf="!isUpdateMode">+Add</button>
+  <button id="submitButton" type="submit" class="btn btn-info"
+  [disabled]="taskForm.invalid" (click)="onUpdateTask()" *ngIf="isUpdateMode">Update</button>
+</form>
+
+<hr>
+
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th scope="col">Task</th>
+      <th scope="col">Doing</th>
+      <th scope="col">Check completed-task</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let task of taskArray; index as i">
+      <td [ngClass]="{'completed-task': task.isCompleted}">
+        {{ task.taskName }}
+      </td>
+    <td> {{task.taskName}}</td>
+    <td>  <input (change)="onChecked(i)" id="myCheckbox"  type="checkbox"></td>
+    <td class="mb-3"> <button class="btn btn-danger btn-sm"
+      (click)="onDelete(i)">Remove</button>| <button class="btn btn-success btn-sm"
+      (click)="onUpdate(i, task.taskName)">Update</button> </td>
+  </tr>
+    <tbody>
+</table>
+
+</div>
